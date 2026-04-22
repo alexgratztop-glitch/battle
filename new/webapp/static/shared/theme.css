@@ -1,0 +1,189 @@
+/* Palette ported from ui_theme.Palette. Single source of truth for the web. */
+:root {
+  --bg-root:   #0a0e27;
+  --bg-panel:  #151a33;
+  --bg-card:   #1a2140;
+  --bg-map:    #0c1030;
+  --bg-cell-empty:  #16204a;
+  --bg-cell-hover:  #22306a;
+  --bg-cell-move:   #1f3a5e;
+  --bg-cell-shoot:  #5c1f1f;
+  --bg-cell-selected: #f4c430;
+
+  --fg-primary:   #e8ecff;
+  --fg-secondary: #9aa3c7;
+  --fg-muted:     #606a8a;
+  --fg-title:     #ffffff;
+
+  --accent-info:    #00d4ff;
+  --accent-success: #6bff9d;
+  --accent-warning: #ffd24a;
+  --accent-danger:  #ff5c7a;
+  --accent-phase:   #b57bff;
+  --accent-mine:    #ff9a3c;
+
+  --border:        #2a355f;
+  --border-strong: #3e4c84;
+
+  --team-a: #4a9dff;
+  --team-b: #ff5c7a;
+  --team-c: #6bff9d;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-root);
+  color: var(--fg-primary);
+  font-family: 'Inter', 'DejaVu Sans', Arial, sans-serif;
+  min-height: 100vh;
+}
+
+a { color: var(--accent-info); }
+
+h1, h2, h3 { color: var(--fg-title); margin: 0 0 8px 0; }
+
+button, .btn {
+  font-family: inherit;
+  font-weight: 600;
+  background: var(--bg-card);
+  color: var(--fg-primary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.05s;
+}
+button:hover, .btn:hover { background: var(--bg-cell-hover); border-color: var(--border-strong); }
+button:active, .btn:active { transform: translateY(1px); }
+button:disabled, .btn[disabled] {
+  opacity: 0.55; cursor: not-allowed;
+}
+button.primary, .btn.primary {
+  background: var(--accent-info);
+  color: #06142b;
+  border-color: var(--accent-info);
+}
+button.primary:hover { background: #2ee7ff; }
+button.danger, .btn.danger {
+  background: var(--accent-danger); color: #240712; border-color: var(--accent-danger);
+}
+button.ghost { background: transparent; border: 1px dashed var(--border-strong); }
+
+input, select, textarea {
+  font: inherit;
+  background: var(--bg-panel);
+  color: var(--fg-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row   { display: flex; flex-direction: row; gap: 8px; align-items: center; flex-wrap: wrap; }
+.grow  { flex: 1; }
+.muted { color: var(--fg-muted); }
+.small { font-size: 12px; color: var(--fg-secondary); }
+
+.team-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 20px;
+  font-weight: 700; letter-spacing: 0.03em;
+}
+.team-pill::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.team-A { color: var(--team-a); }
+.team-B { color: var(--team-b); }
+.team-C { color: var(--team-c); }
+.team-A-bg { background: rgba(74,157,255,0.14); border-left: 3px solid var(--team-a); }
+.team-B-bg { background: rgba(255,92,122,0.14); border-left: 3px solid var(--team-b); }
+.team-C-bg { background: rgba(107,255,157,0.14); border-left: 3px solid var(--team-c); }
+
+.role-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+}
+.role-captain { background: rgba(255,210,74,0.18); color: var(--accent-warning); }
+.role-radist  { background: rgba(0,212,255,0.18);  color: var(--accent-info); }
+.role-crew    { background: rgba(154,163,199,0.15); color: var(--fg-secondary); }
+
+.hp-bar {
+  height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; margin-top: 4px;
+}
+.hp-bar > span { display: block; height: 100%; transition: width 0.2s; }
+.hp-high { background: var(--accent-success); }
+.hp-mid  { background: var(--accent-warning); }
+.hp-low  { background: var(--accent-danger); }
+
+.ship-icon {
+  font-size: 20px;
+}
+.badge { font-size: 11px; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.06); }
+.badge.phase { background: rgba(181,123,255,0.25); color: var(--accent-phase); }
+.badge.cd    { background: rgba(255,210,74,0.2); color: var(--accent-warning); }
+
+header.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 20px; background: #060921; border-bottom: 1px solid var(--border);
+}
+header.topbar .title { display: flex; align-items: baseline; gap: 10px; }
+header.topbar h1 { font-size: 18px; color: var(--accent-info); }
+header.topbar .sub { color: var(--fg-secondary); font-size: 13px; }
+
+main.page { max-width: 1400px; margin: 0 auto; padding: 20px; }
+
+.notice {
+  padding: 8px 12px; border-radius: 6px; font-size: 13px;
+  background: rgba(255,92,122,0.12);
+  color: var(--accent-danger);
+  border: 1px solid rgba(255,92,122,0.4);
+}
+.notice.ok {
+  background: rgba(107,255,157,0.12); color: var(--accent-success);
+  border-color: rgba(107,255,157,0.4);
+}
+.hidden { display: none !important; }
+
+/* Canvas map wrapper. */
+.map-wrap {
+  position: relative;
+  background: var(--bg-map);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+}
+.map-wrap canvas { display: block; width: 100%; height: auto; background: var(--bg-map); border-radius: 6px; }
+
+/* Ship catalog / pool picker */
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+}
+.catalog .card { cursor: pointer; }
+.catalog .card.picked { border-color: var(--accent-info); background: #223463; }
+
+/* Pool counter pills */
+.pool-line {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 8px; background: var(--bg-card); border-radius: 8px;
+  border: 1px dashed var(--border-strong);
+}
+.pool-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: 14px;
+  padding: 3px 10px; font-size: 13px;
+}

@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>🚀 Космический бой</title>
+  <link rel="stylesheet" href="/static/shared/theme.css">
+  <link rel="stylesheet" href="/static/play/play.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="title">
+    <h1>🚀 Космический бой</h1>
+    <span class="sub">Игра <code id="hdr-gid">—</code></span>
+  </div>
+  <div class="row" id="hdr-you">
+    <span class="small muted" id="you-label">—</span>
+    <button id="btn-help" title="Справка по кораблям">?</button>
+  </div>
+</header>
+
+<main class="page stack">
+
+  <!-- SCREEN: connect by game id+key -->
+  <section class="panel hidden" id="screen-connect">
+    <h2>Подключение к игре</h2>
+    <form id="connect-form" class="row">
+      <input id="connect-code" placeholder="ID игры (например AB3K9Q)" maxlength="6" style="text-transform:uppercase;">
+      <input id="connect-key" placeholder="Ключ (4 цифры)" maxlength="4" inputmode="numeric">
+      <button class="primary" type="submit">Открыть игру</button>
+    </form>
+    <p class="small muted">ID и ключ выдает Гейммастер.</p>
+    <span class="notice hidden" id="connect-err"></span>
+  </section>
+
+  <!-- SCREEN: enter name -->
+  <section class="panel hidden" id="screen-join">
+    <h2>Вход в игру</h2>
+    <form id="join-form" class="row">
+      <input id="join-name" placeholder="Ваш ник" maxlength="24" autocomplete="nickname">
+      <button class="primary" type="submit">Войти</button>
+      <span class="notice hidden" id="join-err"></span>
+    </form>
+    <p class="small muted">Попросите админа дать вам ссылку вида <code>/play?g=...</code>.</p>
+  </section>
+
+  <!-- SCREEN: pick team + role -->
+  <section class="panel hidden stack" id="screen-lobby">
+    <h2>Выбор команды</h2>
+    <div class="row" id="lobby-teams"></div>
+
+    <h3>Ваша команда</h3>
+    <div class="card" id="lobby-you"></div>
+
+    <h3>Ваша роль</h3>
+    <div class="row">
+      <button class="btn" data-role="captain">🎖 Стать капитаном</button>
+      <button class="btn" data-role="radist">📡 Стать радистом</button>
+      <button class="btn" data-role="crew">👥 Быть в экипаже</button>
+    </div>
+    <p class="small muted">Капитан выбирает пул кораблей, распределяет их. Радист видит всё, что видят ваши корабли, и может подсказывать капитану. Обычный экипаж управляет своим кораблём.</p>
+
+    <div class="hidden" id="captain-setup">
+      <h3>Капитанский этап</h3>
+
+      <div class="card stack">
+        <div class="row">
+          <label class="grow">Название команды</label>
+          <input id="team-name-input" maxlength="24">
+          <button id="btn-rename">Сохранить</button>
+        </div>
+      </div>
+
+      <div class="card stack">
+        <h4>Пул кораблей (ровно 8)</h4>
+        <div class="pool-line" id="pool-current"></div>
+        <div class="catalog" id="catalog"></div>
+        <div class="row">
+          <button id="btn-save-pool" class="primary">Сохранить пул</button>
+          <span class="small muted" id="pool-hint"></span>
+        </div>
+      </div>
+
+      <div class="card stack">
+        <h4>Распределение кораблей экипажу</h4>
+        <p class="small muted">Доступно после старта партии (нужен сгенерированный набор 8 кораблей).</p>
+        <div id="assign-block" class="small muted">—</div>
+      </div>
+
+      <div class="card row">
+        <label class="grow">
+          <input type="checkbox" id="cb-ready">
+          Готов к бою
+        </label>
+        <span class="small muted">Игра стартует, когда все 3 капитана отметили «Готов»</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN: playing -->
+  <section class="panel hidden stack" id="screen-play">
+    <div class="row">
+      <div class="card grow">
+        <div class="row">
+          <span class="small">Фаза:</span><strong id="play-phase">—</strong>
+          <span class="small">Ход:</span><strong id="play-turn">0</strong>
+          <span class="small">Дедлайн:</span><strong id="play-deadline">—</strong>
+          <span class="grow"></span>
+          <span id="play-role-badge"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="play-grid">
+      <div class="map-wrap">
+        <canvas id="map" width="520" height="560"></canvas>
+        <div id="map-toolbar" class="row small">
+          <span class="muted">Z</span>
+          <input id="z-slider" type="range" min="0" max="9" value="4" style="width:240px;">
+          <strong id="z-label">4</strong>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="panel stack" id="side-ships">
+          <h3>Корабли под управлением</h3>
+          <div id="my-ships"></div>
+        </div>
+
+        <div class="panel stack" id="side-orders">
+          <h3 id="orders-title">Приказы</h3>
+          <div id="orders-list"></div>
+        </div>
+
+        <div class="panel stack">
+          <h3>Данные радара</h3>
+          <div id="intel-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel stack">
+      <h3>Последний ход</h3>
+      <div id="turn-summary" class="small"></div>
+    </div>
+  </section>
+
+  <!-- SCREEN: game over -->
+  <section class="panel hidden stack" id="screen-over">
+    <h2>Партия окончена</h2>
+    <div id="over-info"></div>
+  </section>
+
+</main>
+
+<dialog id="help-modal">
+  <form method="dialog" class="stack">
+    <h2>Справка по типам кораблей</h2>
+    <div id="help-body" class="stack"></div>
+    <button class="primary" value="close">Закрыть</button>
+  </form>
+</dialog>
+
+<script type="module" src="/static/play/play.js"></script>
+</body>
+</html>

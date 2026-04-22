@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>🎮 Админ — Космический бой</title>
+  <link rel="stylesheet" href="/static/shared/theme.css">
+  <link rel="stylesheet" href="/static/admin/admin.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="title">
+    <h1>🎮 Админ-панель</h1>
+    <span class="sub">Космический бой 10×10×10</span>
+  </div>
+  <div class="row" id="auth-status">
+    <span class="small muted" id="auth-label">Не авторизован</span>
+    <button id="btn-logout" class="hidden">Выйти</button>
+  </div>
+</header>
+
+<main class="page stack">
+
+  <!-- LOGIN -->
+  <section class="panel" id="login-panel">
+    <h2>Вход администратора</h2>
+    <p class="muted small">Пароль задаётся переменной окружения <code>GM_PASSWORD</code>. В dev-режиме по умолчанию — <code>admin</code>.</p>
+    <form id="login-form" class="row">
+      <input type="password" id="password" placeholder="Пароль" autocomplete="current-password">
+      <button class="primary" type="submit">Войти</button>
+      <span id="login-err" class="notice hidden"></span>
+    </form>
+  </section>
+
+  <!-- GAMES LIST -->
+  <section class="panel hidden stack" id="games-panel">
+    <div class="row">
+      <h2 class="grow">Список игр</h2>
+      <label class="small">Режим:</label>
+      <select id="create-mode">
+        <option value="advanced">Продвинутый (капитан+радист+экипаж)</option>
+        <option value="normal">Обычный (3 капитана, 10 крейсеров)</option>
+      </select>
+      <button class="primary" id="btn-create">+ Новая игра</button>
+      <button id="btn-refresh">Обновить</button>
+    </div>
+    <div id="games-list" class="stack"></div>
+  </section>
+
+  <!-- MONITOR -->
+  <section class="panel hidden stack" id="monitor-panel">
+    <div class="row">
+      <h2 class="grow">Монитор игры <span id="mon-gid" class="muted small"></span></h2>
+      <button id="btn-back">← К списку</button>
+      <button id="btn-force-start" class="primary hidden">▶ Старт вручную</button>
+      <button id="btn-force-turn" class="hidden">⏭ Завершить ход</button>
+    </div>
+
+    <div class="row">
+      <div class="card grow">
+        <div class="row">
+          <span class="small">Фаза:</span>
+          <strong id="mon-phase">—</strong>
+          <span class="small">Ход:</span>
+          <strong id="mon-turn">0</strong>
+          <span class="small">Игроков:</span>
+          <strong id="mon-players">0</strong>
+          <span class="small">Таймер планирования:</span>
+          <strong id="mon-deadline">—</strong>
+          <span class="small">Лимит:</span>
+          <strong id="mon-timeout">—</strong>
+        </div>
+      </div>
+      <div class="card">
+        <div class="small muted">Ссылки</div>
+        <div class="row" id="mon-links"></div>
+      </div>
+    </div>
+
+    <div class="gm-layout">
+      <div class="card stack">
+        <div class="row">
+          <h3 class="grow">Карта (слой Z)</h3>
+          <input id="map-z" type="range" min="0" max="9" value="0">
+          <strong id="map-z-label">0</strong>
+        </div>
+        <div id="gm-map" class="gm-map"></div>
+      </div>
+
+      <aside class="stack gm-right">
+        <div class="card stack">
+          <h3>Управление ходом</h3>
+          <div class="row">
+            <button id="btn-gm-start">▶ Начать ход</button>
+            <button id="btn-gm-end">⏭ Завершить планирование</button>
+            <button id="btn-gm-stop" class="danger">🛑 Стоп игры</button>
+          </div>
+          <div class="row">
+            <label class="small">Таймаут (сек):</label>
+            <input id="gm-timeout-seconds" type="number" min="5" max="600" value="90" style="width:110px;">
+            <button id="btn-gm-timeout">Применить</button>
+          </div>
+        </div>
+
+        <div class="card stack">
+          <h3>Арбитраж корабля</h3>
+          <div class="row">
+            <label class="small">Ship ID</label><input id="gm-ship-id" placeholder="A_1" style="width:90px;">
+            <label class="small">X</label><input id="gm-x" type="number" min="0" max="9" style="width:62px;">
+            <label class="small">Y</label><input id="gm-y" type="number" min="0" max="9" style="width:62px;">
+            <label class="small">Z</label><input id="gm-z" type="number" min="0" max="9" style="width:62px;">
+          </div>
+          <div class="row">
+            <label class="small">Hits</label><input id="gm-hits" type="number" min="0" max="10" style="width:70px;">
+            <label class="row small"><input id="gm-alive" type="checkbox" checked> alive</label>
+            <button id="btn-gm-override" class="primary">✅ Применить override</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <div id="mon-teams" class="stack"></div>
+
+    <div class="panel" style="max-height: 420px; overflow-y: auto;">
+      <h3>Журнал</h3>
+      <div id="mon-log" class="stack small"></div>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="/static/admin/admin.js"></script>
+</body>
+</html>

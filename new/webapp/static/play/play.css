@@ -1,0 +1,102 @@
+.play-grid {
+  display: grid;
+  grid-template-columns: minmax(420px, 600px) 1fr;
+  gap: 16px;
+}
+@media (max-width: 960px) {
+  .play-grid { grid-template-columns: 1fr; }
+}
+#my-ships .ship, #intel-list .ship, #orders-list .order {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+}
+#my-ships .ship:last-child, #intel-list .ship:last-child, #orders-list .order:last-child {
+  border-bottom: none;
+}
+.ship.enemy { background: rgba(255,92,122,0.06); }
+.ship .ico { font-size: 22px; text-align: center; }
+.ship small { color: var(--fg-secondary); }
+
+.suggest-banner {
+  background: rgba(0,212,255,0.1);
+  border: 1px dashed var(--accent-info);
+  border-radius: 6px;
+  padding: 6px 8px;
+  margin-top: 4px;
+  font-size: 12px;
+}
+
+.action-row button { padding: 4px 10px; font-size: 12px; }
+
+dialog {
+  background: var(--bg-panel);
+  color: var(--fg-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 720px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow: auto;
+}
+dialog::backdrop { background: rgba(0,0,0,0.75); }
+
+.help-card {
+  border-left: 3px solid var(--accent-info);
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border-radius: 4px;
+}
+.help-card h4 { margin: 0 0 4px 0; }
+.help-card ul { margin: 4px 0 0 16px; padding: 0; }
+
+.team-btn {
+  padding: 12px 20px;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.05em;
+}
+.team-btn.team-A { border-color: var(--team-a); }
+.team-btn.team-B { border-color: var(--team-b); }
+.team-btn.team-C { border-color: var(--team-c); }
+.team-btn.selected {
+  background: rgba(0,212,255,0.15);
+  border-color: var(--accent-info);
+}
+
+#map-toolbar {
+  overflow-x: auto;
+  padding-top: 8px;
+}
+#z-slider {
+  accent-color: var(--accent-info);
+}
+
+@media (max-width: 700px) {
+  main.page { padding: 10px; }
+  header.topbar { padding: 8px 10px; }
+  header.topbar h1 { font-size: 15px; }
+  .panel { padding: 10px; border-radius: 8px; }
+  .card { padding: 8px; }
+  .row { gap: 6px; }
+  button, .btn { padding: 8px 10px; font-size: 13px; }
+  input, select, textarea { padding: 7px 8px; font-size: 13px; }
+  .team-btn { padding: 10px 12px; font-size: 14px; }
+  #my-ships .ship, #intel-list .ship, #orders-list .order {
+    grid-template-columns: 28px 1fr;
+    gap: 6px;
+    padding: 5px 4px;
+  }
+  .ship .action-row, .order .action-row {
+    grid-column: 1 / -1;
+  }
+  .action-row button { padding: 4px 7px; font-size: 11px; }
+  #map { width: 100%; height: auto; }
+  #map-toolbar { flex-wrap: nowrap; }
+  #z-slider { width: 160px !important; }
+  .small { font-size: 11px; }
+}
